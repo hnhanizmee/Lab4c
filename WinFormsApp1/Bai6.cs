@@ -6,36 +6,36 @@ namespace WinFormsApp1
 {
     public partial class Bai6 : Form
     {
-        private Button[] ghe;
+        private Button[] ghe = new Button[15];
 
         public Bai6()
         {
             InitializeComponent();
         }
 
-        private long GiaVe(Button button)
+        private int LayGiaVe(int soGhe)
         {
-            int soGhe = (int)button.Tag;
-
-            if (soGhe <= 5)
+            if (soGhe >= 1 && soGhe <= 5)
                 return 1000;
 
-            if (soGhe <= 10)
+            if (soGhe >= 6 && soGhe <= 10)
                 return 1500;
 
-            return 2000;
+            if (soGhe >= 11 && soGhe <= 15)
+                return 2000;
+
+            return 0;
         }
 
-        private void Ghe_Click(
-            object sender,
-            EventArgs e)
+        private void Ghe_Click(object sender, EventArgs e)
         {
-            Button button = (Button)sender;
+            Button btn = (Button)sender;
 
-            if (button.BackColor == Color.Yellow)
+            // Ghế đã bán
+            if (btn.BackColor == Color.Yellow)
             {
                 MessageBox.Show(
-                    "Ghế này đã được bán!",
+                    "Ghế số " + btn.Tag + " đã được bán!",
                     "Thông báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -43,86 +43,85 @@ namespace WinFormsApp1
                 return;
             }
 
-            if (button.BackColor == Color.DodgerBlue)
+            // Ghế đang chọn -> bỏ chọn
+            if (btn.BackColor == Color.DodgerBlue)
             {
-                button.BackColor = Color.White;
+                btn.BackColor = Color.White;
             }
+            // Ghế chưa bán -> chọn
             else
             {
-                button.BackColor = Color.DodgerBlue;
+                btn.BackColor = Color.DodgerBlue;
             }
-
-            CapNhatTien();
         }
 
-        private void CapNhatTien()
+        private void btnChon_Click(object sender, EventArgs e)
         {
-            long tongTien = 0;
+            int tongTien = 0;
+            bool coGhe = false;
 
-            foreach (Button button in ghe)
+            for (int i = 0; i < ghe.Length; i++)
             {
-                if (button.BackColor == Color.DodgerBlue)
+                Button btn = ghe[i];
+
+                // Chỉ xử lý những ghế đang chọn màu xanh
+                if (btn.BackColor == Color.DodgerBlue)
                 {
-                    tongTien += GiaVe(button);
+                    int soGhe = Convert.ToInt32(btn.Tag);
+
+                    tongTien += LayGiaVe(soGhe);
+
+                    // Đã bán
+                    btn.BackColor = Color.Yellow;
+
+                    coGhe = true;
                 }
             }
 
-            lblThanhTien.Text =
-                tongTien.ToString();
+            // Xuất thành tiền
+            lblThanhTien.Text = tongTien.ToString();
+
+            if (!coGhe)
+            {
+                MessageBox.Show(
+                    "Bạn chưa chọn ghế nào!",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                lblThanhTien.Text = "0";
+            }
         }
 
-        private void btnChon_Click(
-            object sender,
-            EventArgs e)
+        private void btnHuyBo_Click(object sender, EventArgs e)
         {
-            long tongTien = 0;
-
-            foreach (Button button in ghe)
+            // Những ghế đang chọn -> trả về chưa bán
+            for (int i = 0; i < ghe.Length; i++)
             {
-                if (button.BackColor == Color.DodgerBlue)
+                if (ghe[i].BackColor == Color.DodgerBlue)
                 {
-                    button.BackColor = Color.Yellow;
-                    tongTien += GiaVe(button);
+                    ghe[i].BackColor = Color.White;
                 }
             }
 
-            lblThanhTien.Text =
-                tongTien.ToString();
-        }
-
-        private void btnHuy_Click(
-            object sender,
-            EventArgs e)
-        {
-            foreach (Button button in ghe)
-            {
-                if (button.BackColor == Color.DodgerBlue)
-                {
-                    button.BackColor = Color.White;
-                }
-            }
-
+            // Thành tiền = 0
             lblThanhTien.Text = "0";
         }
 
-        private void btnThoat_Click(
-            object sender,
-            EventArgs e)
+        private void btnThoat_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void Bai6_FormClosing(
-            object sender,
-            FormClosingEventArgs e)
+        private void Bai6_FormClosing(object sender, FormClosingEventArgs e)
         {
             DialogResult result = MessageBox.Show(
-                "Bạn có muốn thoát?",
-                "Thoát",
+                "Bạn có muốn thoát chương trình không?",
+                "Xác nhận thoát",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
-            if (result != DialogResult.Yes)
+            if (result == DialogResult.No)
             {
                 e.Cancel = true;
             }
