@@ -1,6 +1,6 @@
 ﻿namespace WinFormsApp1
 {
-    partial class Bai6
+    partial class BTNangCao
     {
         private System.ComponentModel.IContainer components = null;
 

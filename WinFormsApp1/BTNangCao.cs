@@ -4,11 +4,11 @@ using System.Windows.Forms;
 
 namespace WinFormsApp1
 {
-    public partial class Bai6 : Form
+    public partial class BTNangCao : Form
     {
         private Button[] ghe = new Button[15];
 
-        public Bai6()
+        public BTNangCao()
         {
             InitializeComponent();
         }

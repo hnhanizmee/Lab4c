@@ -10,7 +10,7 @@ namespace WinFormsApp1
         {
             ApplicationConfiguration.Initialize();
 
-            Application.Run(new Bai6());
+            Application.Run(new BTNangCao());
         }
     }
 }
